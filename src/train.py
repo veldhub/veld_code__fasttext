@@ -75,7 +75,6 @@ model_data_size = calc_size(MODEL_PATH)
 train_data_md5_hash = subprocess.run(["md5sum", TRAIN_DATA_PATH], capture_output=True, text=True)
 train_data_md5_hash = train_data_md5_hash.stdout.split()[0]
 
-
 # aggregate into metadata dictionary
 metadata = {
     "training_architecture": TRAINING_ARCHITECTURE,
@@ -84,8 +83,7 @@ metadata = {
     "train_data_size": train_data_size,
     "train_data_md5_hash": train_data_md5_hash,
     "training_vector_size": VECTOR_SIZE,
-    "window": WINDOW,
-    "min_count": MIN_COUNT,
+    "epochs": EPOCHS,
     "training_duration (minutes)": round(duration, 1),
     "model_data_size": model_data_size,
 }
