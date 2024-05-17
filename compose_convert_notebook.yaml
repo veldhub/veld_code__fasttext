@@ -1,0 +1,10 @@
+
+services:
+
+  # helper service, to transform notebook into py script for non-interactive execution
+  convert_notebook:
+    build: .
+    volumes:
+      - ./src:/veld/executable/
+    command: jupyter nbconvert --to script /veld/executable/train.ipynb
+
