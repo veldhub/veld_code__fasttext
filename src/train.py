@@ -82,8 +82,8 @@ metadata = {
     "train_data_name": TRAIN_DATA_DESCRIPTION,
     "train_data_size": train_data_size,
     "train_data_md5_hash": train_data_md5_hash,
+    "training_epochs": EPOCHS,
     "training_vector_size": VECTOR_SIZE,
-    "epochs": EPOCHS,
     "training_duration (minutes)": round(duration, 1),
     "model_data_size": model_data_size,
 }
