@@ -4,10 +4,5 @@ x-veld:
 services:
   veld:
     build: .
-    ports:
-      - 8888:8888
-    volumes:
-      - ./src:/veld/executable/
-    working_dir: /veld/executable/
-    command: jupyter notebook --ip='*' --NotebookApp.token='' --NotebookApp.password=''
+    command: bash -c "jupyter nbconvert --to script /veld/executable/train.ipynb && python /veld/executable/train.py"
 
