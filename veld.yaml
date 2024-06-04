@@ -1,5 +1,5 @@
 x-veld:
-  executable:
+  code:
 
 services:
   veld:
@@ -7,7 +7,7 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - ./src:/veld/executable/
-    working_dir: /veld/executable/
+      - ./src:/veld/code/
+    working_dir: /veld/code/
     command: jupyter notebook --ip='*' --NotebookApp.token='' --NotebookApp.password=''
 
