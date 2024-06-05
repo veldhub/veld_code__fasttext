@@ -1,13 +1,18 @@
 x-veld:
   code:
+    # TODO
+    about:
+      description:
+      topics:
 
 services:
   veld:
     build: .
+    command: jupyter notebook --ip='*' --NotebookApp.token='' --NotebookApp.password=''
+    # TODO: check if this work dir is necessary
+    working_dir: /veld/code/
     ports:
       - 8888:8888
     volumes:
       - ./src:/veld/code/
-    working_dir: /veld/code/
-    command: jupyter notebook --ip='*' --NotebookApp.token='' --NotebookApp.password=''
 
