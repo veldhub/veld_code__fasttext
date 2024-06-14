@@ -1,18 +1,64 @@
 x-veld:
   code:
-    # TODO
     about:
-      description:
+      description: "a fasttext training and inference jupyter notebook."
       topics:
+        - "NLP"
+        - "Machine Learning"
+        - "word embeddings"
+
+    inputs:
+      volume: /veld/input/
+      file_formats: "txt"
+      contents: "natural text"
+      description: "training data must be expressed as one sentence per line."
+
+    outputs:
+      - volume: /veld/output/
+        file_formats: "fasttext model"
+        contents: "word embeddings"
+      - volume: /veld/output/
+        file_formats: "yaml"
+        contents: "model metadata"
+
+    environment:
+      in_train_data_file:
+        type: file
+        volume: /veld/input/
+      train_data_description:
+        type: str
+        description: "a human label or a precise identifier for the training data set used"
+      training_architecture:
+        type: str
+        description: "a human label for the kind of fasttext architecture, or version of it"
+      model_id:
+        type: str
+        description: "a unique identifier for the model to be trained"
+      vector_size:
+        type: int
+        default: 200
+        description: "hyperparameter: the dimension of the vectors to be trained."
+      epochs:
+        type: int
+        default: 50
+        description: "hyperparameter: the number of epochs of the training."
+
+
 
 services:
   veld:
     build: .
     command: jupyter notebook --ip='*' --NotebookApp.token='' --NotebookApp.password=''
-    # TODO: check if this work dir is necessary
     working_dir: /veld/code/
     ports:
       - 8888:8888
     volumes:
       - ./src:/veld/code/
+    environment:
+      in_train_data_file: null
+      train_data_description: null
+      training_architecture: null
+      model_id: null
+      vector_size: 200
+      epochs: 50
 
