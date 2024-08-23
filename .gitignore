@@ -1,2 +1,9 @@
 /src/.cache/
 /src/.wget-hsts
+/src/.bash_history
+/src/.ipython
+/src/.jupyter
+/src/.local
+/src/.python_history
+src/.ipynb_checkpoints/
+

@@ -1,0 +1,41 @@
+x-veld:
+  code:
+    about:
+      description: "a fasttext training and inference jupyter notebook."
+      topics:
+        - "NLP"
+        - "Machine Learning"
+        - "word embeddings"
+
+    inputs:
+      - volume: /veld/input/1/
+        file_formats: "txt"
+        contents: 
+          - "training data"
+          - "natural text"
+        description: "training data must be expressed as one sentence per line."
+      - volume: /veld/input/2
+        file_formats: "fasttext model"
+        contents: "word embeddings"
+
+    environment:
+      in_train_data_path:
+        type: file
+        volume: /veld/input/1/
+      in_model_path:
+        type: file
+        volume: /veld/input/2/
+
+services:
+  veld:
+    build: .
+    command: jupyter notebook --allow-root --ip='*' --NotebookApp.token='' --NotebookApp.password=''
+    working_dir: /veld/code/
+    ports:
+      - 8888:8888
+    volumes:
+      - ./src:/veld/code/
+    environment:
+      in_train_data_path: null
+      in_model_path: null
+

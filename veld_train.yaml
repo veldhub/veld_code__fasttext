@@ -14,26 +14,29 @@ x-veld:
       description: "training data must be expressed as one sentence per line."
 
     outputs:
-      - volume: /veld/output/
+      - volume: /veld/output/1/
         file_formats: "fasttext model"
         contents: "word embeddings"
-      - volume: /veld/output/
+      - volume: /veld/output/2/
         file_formats: "yaml"
         contents: "model metadata"
 
     environment:
-      in_train_data_file:
+      in_train_data_path:
         type: file
         volume: /veld/input/
+      out_model_path:
+        type: folder
+        volume: /veld/output/1/
+      out_metadata_path:
+        type: file
+        volume: /veld/output/2/
       train_data_description:
         type: str
         description: "a human label or a precise identifier for the training data set used"
       training_architecture:
         type: str
         description: "a human label for the kind of fasttext architecture, or version of it"
-      model_id:
-        type: str
-        description: "a unique identifier for the model to be trained"
       vector_size:
         type: int
         default: 200
@@ -48,17 +51,18 @@ x-veld:
 services:
   veld:
     build: .
-    command: jupyter notebook --ip='*' --NotebookApp.token='' --NotebookApp.password=''
+    command: python train.py
     working_dir: /veld/code/
     ports:
       - 8888:8888
     volumes:
       - ./src:/veld/code/
     environment:
-      in_train_data_file: null
+      in_train_data_path: null
+      out_model_path: null
+      out_metadata_path: null
       train_data_description: null
       training_architecture: null
-      model_id: null
       vector_size: 200
       epochs: 50
 
