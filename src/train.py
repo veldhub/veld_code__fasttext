@@ -11,9 +11,9 @@ TRAIN_DATA_DESCRIPTION = os.getenv("train_data_description")
 
 # model data
 TRAINING_ARCHITECTURE = os.getenv("training_architecture")
-MODEL_PATH = os.getenv("model_path")
-MODEL_ID = MODEL_PATH.split("/")[-1]
-MODEL_METADATA_PATH = os.getenv("out_metadata_path")
+MODEL_ID = os.getenv("model_id")
+OUT_MODEL_SUBFOLDER = os.getenv("out_model_folder") + "/" + MODEL_ID + "/"
+MODEL_METADATA_PATH = OUT_MODEL_SUBFOLDER + f"/metadata.yaml" 
 
 # model hyperparameters
 VECTOR_SIZE = int(os.getenv("vector_size"))
@@ -27,7 +27,7 @@ def print_params():
     print(f"TRAIN_DATA_PATH: {TRAIN_DATA_PATH}")
     print(f"TRAIN_DATA_DESCRIPTION: {TRAIN_DATA_DESCRIPTION}")
     print(f"TRAINING_ARCHITECTURE: {TRAINING_ARCHITECTURE}")
-    print(f"MODEL_PATH: {MODEL_PATH}")
+    print(f"OUT_MODEL_SUBFOLDER: {OUT_MODEL_SUBFOLDER}")
     print(f"MODEL_ID: {MODEL_ID}")
     print(f"MODEL_METADATA_PATH: {MODEL_METADATA_PATH}")
     print(f"VECTOR_SIZE: {VECTOR_SIZE}")
@@ -43,9 +43,9 @@ def train_and_persist():
     print("training done:", time_end, flush=True)
     global DURATION
     DURATION = (time_end - time_start).seconds / 3600
-    if not os.path.exists(MODEL_PATH):
-        os.makedirs(MODEL_PATH)
-    model.save_model(MODEL_PATH + "/model.bin")
+    if not os.path.exists(OUT_MODEL_SUBFOLDER):
+        os.makedirs(OUT_MODEL_SUBFOLDER)
+    model.save_model(OUT_MODEL_SUBFOLDER + "/model.bin")
 
 
 def write_metadata():
@@ -56,7 +56,7 @@ def write_metadata():
         size = size.stdout.split()[0]
         return size
     train_data_size = calc_size(TRAIN_DATA_PATH)
-    model_data_size = calc_size(MODEL_PATH)
+    model_data_size = calc_size(OUT_MODEL_SUBFOLDER)
 
     # calculate hash of training data
     train_data_md5_hash = subprocess.run(["md5sum", TRAIN_DATA_PATH], capture_output=True, text=True)
