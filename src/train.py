@@ -6,30 +6,44 @@ from datetime import datetime
 
 
 # train data 
-TRAIN_DATA_PATH = os.getenv("train_data_path")
-TRAIN_DATA_DESCRIPTION = os.getenv("train_data_description")
+TRAIN_DATA_FILE = os.getenv("in_train_data_file")
+TRAIN_DATA_PATH = "/veld/input/" + TRAIN_DATA_FILE
 
 # model data
-TRAINING_ARCHITECTURE = os.getenv("training_architecture")
-MODEL_ID = os.getenv("model_id")
-OUT_MODEL_SUBFOLDER = os.getenv("out_model_folder") + "/" + MODEL_ID + "/"
-MODEL_METADATA_PATH = OUT_MODEL_SUBFOLDER + f"/metadata.yaml" 
+TRAINING_ARCHITECTURE = "fasttext_v1"
+OUT_MODEL_FILE = os.getenv("out_model_file")
+OUT_MODEL_PATH = "/veld/output/" + OUT_MODEL_FILE
 
 # model hyperparameters
 VECTOR_SIZE = int(os.getenv("vector_size"))
 EPOCHS = int(os.getenv("epochs"))
 
-# training process metadata
+# dynamically loaded metadata
+TRAIN_DATA_DESCRIPTION = None
 DURATION = None
 
 
+def get_desc():
+    veld_file = None
+    for file in os.listdir("/veld/input/"):
+        if file.startswith("veld") and file.endswith("yaml"):
+            if veld_file is not None:
+                raise Exception("Multiple veld yaml files found.")
+            else:
+                veld_file = file
+    if veld_file is None:
+        raise Exception("No veld yaml file found.")
+    with open("/veld/input/" + veld_file, "r") as f:
+        input_veld_metadata = yaml.safe_load(f)
+        global TRAIN_DATA_DESCRIPTION
+        TRAIN_DATA_DESCRIPTION = input_veld_metadata["x-veld"]["data"]["about"]["description"]
+
+
 def print_params():
-    print(f"TRAIN_DATA_PATH: {TRAIN_DATA_PATH}")
+    print(f"TRAIN_DATA_FILE: {TRAIN_DATA_FILE}")
     print(f"TRAIN_DATA_DESCRIPTION: {TRAIN_DATA_DESCRIPTION}")
     print(f"TRAINING_ARCHITECTURE: {TRAINING_ARCHITECTURE}")
-    print(f"OUT_MODEL_SUBFOLDER: {OUT_MODEL_SUBFOLDER}")
-    print(f"MODEL_ID: {MODEL_ID}")
-    print(f"MODEL_METADATA_PATH: {MODEL_METADATA_PATH}")
+    print(f"OUT_MODEL_FILE: {OUT_MODEL_FILE}")
     print(f"VECTOR_SIZE: {VECTOR_SIZE}")
     print(f"EPOCHS: {EPOCHS}")
 
@@ -43,9 +57,7 @@ def train_and_persist():
     print("training done:", time_end, flush=True)
     global DURATION
     DURATION = (time_end - time_start).seconds / 3600
-    if not os.path.exists(OUT_MODEL_SUBFOLDER):
-        os.makedirs(OUT_MODEL_SUBFOLDER)
-    model.save_model(OUT_MODEL_SUBFOLDER + "/model.bin")
+    model.save_model(OUT_MODEL_PATH)
 
 
 def write_metadata():
@@ -56,36 +68,47 @@ def write_metadata():
         size = size.stdout.split()[0]
         return size
     train_data_size = calc_size(TRAIN_DATA_PATH)
-    model_data_size = calc_size(OUT_MODEL_SUBFOLDER)
+    model_data_size = calc_size(OUT_MODEL_PATH)
 
     # calculate hash of training data
     train_data_md5_hash = subprocess.run(["md5sum", TRAIN_DATA_PATH], capture_output=True, text=True)
     train_data_md5_hash = train_data_md5_hash.stdout.split()[0]
 
     # aggregate into metadata dictionary
-    metadata = {
-        "training_architecture": TRAINING_ARCHITECTURE,
-        "model_id": MODEL_ID, 
-        "train_data_name": TRAIN_DATA_DESCRIPTION,
-        "train_data_size": train_data_size,
-        "train_data_md5_hash": train_data_md5_hash,
-        "training_epochs": EPOCHS,
-        "training_vector_size": VECTOR_SIZE,
-        "training_duration (hours)": round(DURATION, 1),
-        "model_data_size": model_data_size,
+    veld_data_out = {
+        "x-veld": {
+            "data": {
+                "about": {
+                    "description": TRAIN_DATA_DESCRIPTION,
+                },
+                "file_type": "bin",
+                "content": [
+                    "word embeddings model",
+                    "fasttext model",
+                ],
+                "details": {
+                    "training_architecture": TRAINING_ARCHITECTURE,
+                    "train_data_size": train_data_size,
+                    "train_data_md5_hash": train_data_md5_hash,
+                    "training_epochs": EPOCHS,
+                    "training_vector_size": VECTOR_SIZE,
+                    # "training_duration (hours)": round(DURATION, 1),
+                    "model_data_size": model_data_size,
+                }
+            }
+        }
     }
 
     # write to yaml
-    with open(MODEL_METADATA_PATH, "w") as f:
-        # iteration over dictionary to ensure the yaml writer respects the order
-        for k, v in metadata.items():
-            yaml.dump({k: v}, f)
+    with open("/veld/output/veld.yaml", "w") as f:
+        yaml.dump(veld_data_out, f, sort_keys=False)
 
 
 def main():
+    get_desc()
     print_params()
     train_and_persist()
-    write_metadata#()
+    write_metadata()
 
 
 if __name__ == "__main__":
