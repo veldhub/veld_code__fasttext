@@ -40,7 +40,7 @@ services:
     build: .
     command: python /veld/code/train.py
     volumes:
-      - ./src:/veld/code/:z
+      - ./src/train/train.py:/veld/code/train.py:z
     environment:
       in_train_data_file: null
       out_model_file: null
