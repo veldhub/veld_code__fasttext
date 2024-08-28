@@ -75,11 +75,11 @@ def write_metadata():
     train_data_md5_hash = train_data_md5_hash.stdout.split()[0]
 
     # aggregate into metadata dictionary
-    veld_data_out = {
+    out_veld_metadata = {
         "x-veld": {
             "data": {
                 "about": {
-                    "description": TRAIN_DATA_DESCRIPTION,
+                    "description": "fasttext test model",
                 },
                 "file_type": "bin",
                 "content": [
@@ -87,6 +87,7 @@ def write_metadata():
                     "fasttext model",
                 ],
                 "details": {
+                    "train_data_description": TRAIN_DATA_DESCRIPTION,
                     "training_architecture": TRAINING_ARCHITECTURE,
                     "train_data_size": train_data_size,
                     "train_data_md5_hash": train_data_md5_hash,
@@ -101,7 +102,7 @@ def write_metadata():
 
     # write to yaml
     with open("/veld/output/veld.yaml", "w") as f:
-        yaml.dump(veld_data_out, f, sort_keys=False)
+        yaml.dump(out_veld_metadata, f, sort_keys=False)
 
 
 def main():
