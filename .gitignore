@@ -5,5 +5,5 @@
 /src/.jupyter
 /src/.local
 /src/.python_history
-src/.ipynb_checkpoints/
+**/.ipynb_checkpoints
 
