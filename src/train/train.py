@@ -11,8 +11,8 @@ TRAIN_DATA_PATH = "/veld/input/" + TRAIN_DATA_FILE
 
 # model data
 TRAINING_ARCHITECTURE = "fasttext_v1"
-OUT_MODEL_FILE = os.getenv("out_model_file")
-OUT_MODEL_PATH = "/veld/output/" + OUT_MODEL_FILE
+MODEL_ID = os.getenv("model_id")
+OUT_MODEL_PATH = "/veld/output/" + MODEL_ID + ".bin"
 
 # model hyperparameters
 VECTOR_SIZE = int(os.getenv("vector_size"))
@@ -36,14 +36,14 @@ def get_desc():
     with open("/veld/input/" + veld_file, "r") as f:
         input_veld_metadata = yaml.safe_load(f)
         global TRAIN_DATA_DESCRIPTION
-        TRAIN_DATA_DESCRIPTION = input_veld_metadata["x-veld"]["data"]["about"]["description"]
+        TRAIN_DATA_DESCRIPTION = input_veld_metadata["x-veld"]["data"]["description"]
 
 
 def print_params():
     print(f"TRAIN_DATA_FILE: {TRAIN_DATA_FILE}")
     print(f"TRAIN_DATA_DESCRIPTION: {TRAIN_DATA_DESCRIPTION}")
     print(f"TRAINING_ARCHITECTURE: {TRAINING_ARCHITECTURE}")
-    print(f"OUT_MODEL_FILE: {OUT_MODEL_FILE}")
+    print(f"MODEL_ID: {MODEL_ID}")
     print(f"VECTOR_SIZE: {VECTOR_SIZE}")
     print(f"EPOCHS: {EPOCHS}")
 
@@ -78,22 +78,20 @@ def write_metadata():
     out_veld_metadata = {
         "x-veld": {
             "data": {
-                "about": {
-                    "description": "fasttext test model",
-                },
-                "file_type": "bin",
-                "content": [
+                "description": "fasttext test model",
+                "file_types": "bin",
+                "contents": [
                     "word embeddings model",
                     "fasttext model",
                 ],
-                "details": {
+                "additional": {
                     "train_data_description": TRAIN_DATA_DESCRIPTION,
                     "training_architecture": TRAINING_ARCHITECTURE,
                     "train_data_size": train_data_size,
                     "train_data_md5_hash": train_data_md5_hash,
                     "training_epochs": EPOCHS,
                     "training_vector_size": VECTOR_SIZE,
-                    # "training_duration (hours)": round(DURATION, 1),
+                    "training_duration (hours)": round(DURATION, 1),
                     "model_data_size": model_data_size,
                 }
             }
