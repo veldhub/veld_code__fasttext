@@ -56,7 +56,7 @@ def train_and_persist():
     time_end = datetime.now()
     print("training done:", time_end, flush=True)
     global DURATION
-    DURATION = (time_end - time_start).seconds / 3600
+    DURATION = (time_end - time_start).seconds / 60
     model.save_model(OUT_MODEL_PATH)
 
 
@@ -91,7 +91,7 @@ def write_metadata():
                     "train_data_md5_hash": train_data_md5_hash,
                     "training_epochs": EPOCHS,
                     "training_vector_size": VECTOR_SIZE,
-                    "training_duration (hours)": round(DURATION, 1),
+                    "training_duration (minutes)": round(DURATION, 1),
                     "model_data_size": model_data_size,
                 }
             }
