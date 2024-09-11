@@ -10,8 +10,9 @@ TRAIN_DATA_FILE = os.getenv("in_train_data_file")
 TRAIN_DATA_PATH = "/veld/input/" + TRAIN_DATA_FILE
 
 # model data
-TRAINING_ARCHITECTURE = "fasttext_v1"
+TRAINING_ARCHITECTURE = "fasttext"
 MODEL_ID = os.getenv("model_id")
+MODEL_DESCRIPTION = os.getenv("model_description")
 OUT_MODEL_PATH = "/veld/output/" + MODEL_ID + ".bin"
 OUT_MODEL_METADATA_PATH = "/veld/output/veld.yaml"
 
@@ -73,13 +74,14 @@ def write_metadata():
     out_veld_metadata = {
         "x-veld": {
             "data": {
-                "description": "fasttext test model",
+                "description": MODEL_DESCRIPTION,
                 "file_types": "bin",
                 "contents": [
                     "word embeddings model",
                     "fasttext model",
                 ],
                 "additional": {
+                    "model_id": MODEL_ID,
                     "train_data_description": TRAIN_DATA_DESCRIPTION,
                     "training_architecture": TRAINING_ARCHITECTURE,
                     "train_data_size": train_data_size,
