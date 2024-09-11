@@ -13,6 +13,7 @@ TRAIN_DATA_PATH = "/veld/input/" + TRAIN_DATA_FILE
 TRAINING_ARCHITECTURE = "fasttext_v1"
 MODEL_ID = os.getenv("model_id")
 OUT_MODEL_PATH = "/veld/output/" + MODEL_ID + ".bin"
+OUT_MODEL_METADATA_PATH = "/veld/output/veld.yaml"
 
 # model hyperparameters
 VECTOR_SIZE = int(os.getenv("vector_size"))
@@ -32,27 +33,21 @@ def get_desc():
             else:
                 veld_file = file
     if veld_file is None:
-        raise Exception("No veld yaml file found.")
-    with open("/veld/input/" + veld_file, "r") as f:
-        input_veld_metadata = yaml.safe_load(f)
-        global TRAIN_DATA_DESCRIPTION
-        TRAIN_DATA_DESCRIPTION = input_veld_metadata["x-veld"]["data"]["description"]
-
-
-def print_params():
-    print(f"TRAIN_DATA_FILE: {TRAIN_DATA_FILE}")
-    print(f"TRAIN_DATA_DESCRIPTION: {TRAIN_DATA_DESCRIPTION}")
-    print(f"TRAINING_ARCHITECTURE: {TRAINING_ARCHITECTURE}")
-    print(f"MODEL_ID: {MODEL_ID}")
-    print(f"VECTOR_SIZE: {VECTOR_SIZE}")
-    print(f"EPOCHS: {EPOCHS}")
+        print("no training data veld yaml file found. Won't be able to persist that as metadata.", flush=True)
+    else:
+        with open("/veld/input/" + veld_file, "r") as f:
+            input_veld_metadata = yaml.safe_load(f)
+            global TRAIN_DATA_DESCRIPTION
+            try:
+                TRAIN_DATA_DESCRIPTION = input_veld_metadata["x-veld"]["data"]["description"]
+            except:
+                pass
 
 
 def train_and_persist():
     time_start = datetime.now()
-    # flush necessary for jupyter VM podman, to keep prints synchronized
     print("training start:", time_start, flush=True)
-    model = fasttext.train_unsupervised(TRAIN_DATA_PATH, epoch=EPOCHS, dim=VECTOR_SIZE)
+    model = fasttext.train_unsupervised(TRAIN_DATA_PATH, epoch=EPOCHS, dim=VECTOR_SIZE, verbose=3)
     time_end = datetime.now()
     print("training done:", time_end, flush=True)
     global DURATION
@@ -99,13 +94,12 @@ def write_metadata():
     }
 
     # write to yaml
-    with open("/veld/output/veld.yaml", "w") as f:
+    with open(OUT_MODEL_METADATA_PATH, "w") as f:
         yaml.dump(out_veld_metadata, f, sort_keys=False)
 
 
 def main():
     get_desc()
-    print_params()
     train_and_persist()
     write_metadata()
 
