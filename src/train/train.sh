@@ -7,7 +7,7 @@
 # the training process has finished.
 
 echo "in_train_data_file: ${in_train_data_file}"
-echo "model_id: ${model_id}"
+echo "out_model_file: ${out_model_file}"
 echo "vector_size: ${vector_size}"
 echo "epochs: ${epochs}"
 

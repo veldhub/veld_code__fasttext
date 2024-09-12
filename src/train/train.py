@@ -11,9 +11,10 @@ TRAIN_DATA_PATH = "/veld/input/" + TRAIN_DATA_FILE
 
 # model data
 TRAINING_ARCHITECTURE = "fasttext"
-MODEL_ID = os.getenv("model_id")
 MODEL_DESCRIPTION = os.getenv("model_description")
-OUT_MODEL_PATH = "/veld/output/" + MODEL_ID + ".bin"
+OUT_MODEL_FILE = os.getenv("out_model_file")
+OUT_MODEL_PATH = "/veld/output/" + OUT_MODEL_FILE
+MODEL_ID = OUT_MODEL_FILE.replace(".bin", "")
 OUT_MODEL_METADATA_PATH = "/veld/output/veld.yaml"
 
 # model hyperparameters
