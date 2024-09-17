@@ -41,6 +41,8 @@ services:
     command: /veld/code/train.sh
     volumes:
       - ./src/train/:/veld/code/:z
+      - ./data/training_data/:/veld/input/:z
+      - ./data/models/:/veld/output/:z
     environment:
       in_train_data_file: null
       out_model_file: null
