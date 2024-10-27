@@ -6,9 +6,6 @@ x-veld:
       - "Machine Learning"
       - "word embeddings"
 
-    storage:
-      volume: /veld/storage/
-
 services:
   veld_jupyter_notebook:
     build: .

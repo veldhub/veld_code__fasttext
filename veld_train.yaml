@@ -1,38 +1,37 @@
 x-veld:
   code:
-    about:
-      description: "a fasttext training and inference jupyter notebook."
-      topics:
-        - "NLP"
-        - "Machine Learning"
-        - "word embeddings"
+    description: "a fasttext training and inference jupyter notebook."
+    topics:
+      - "NLP"
+      - "Machine Learning"
+      - "word embeddings"
 
     inputs:
-      volume: /veld/input/
-      file_formats: "txt"
-      contents: "natural text"
-      description: "training data must be expressed as one sentence per line."
+      - volume: /veld/input/
+        file_type: "txt"
+        environment: in_train_data_file
+        description: "training data must be expressed as one sentence per line."
+        contents: "raw text"
 
     outputs:
-      volume: /veld/output/
-      file_formats: "fasttext model"
-      contents: "word embeddings"
+      - volume: /veld/output/
+        file_type:
+          - "bin"
+          - "fasttext model"
+        environment: out_model_file
+        contents:
+          - "fasttext model"
+          - "word embeddings"
 
-    environment:
-      in_train_data_file:
-        file_type: "txt"
-        volume: /veld/input/
-      out_model_file:
-        file_type: "bin"
-        volume: /veld/output/
-      vector_size:
-        var_type: int
-        default: 200
+    settings:
+      - environment: vector_size
         description: "hyperparameter: the dimension of the vectors to be trained."
-      epochs:
-        var_type: int
-        default: 50
+        env_type: "int"
+        default: 200
+      - environment: epochs
         description: "hyperparameter: the number of epochs of the training."
+        env_type: "int"
+        default: 50
 
 
 services:
