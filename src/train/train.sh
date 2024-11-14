@@ -10,6 +10,7 @@ echo "in_train_data_file: ${in_train_data_file}"
 echo "out_model_file: ${out_model_file}"
 echo "vector_size: ${vector_size}"
 echo "epochs: ${epochs}"
+echo "window_size: ${window_size}"
 
 python /veld/code/train.py &> /tmp/log &
 

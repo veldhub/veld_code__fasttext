@@ -20,6 +20,7 @@ OUT_MODEL_METADATA_PATH = "/veld/output/veld.yaml"
 # model hyperparameters
 VECTOR_SIZE = int(os.getenv("vector_size"))
 EPOCHS = int(os.getenv("epochs"))
+WINDOW_SIZE = int(os.getenv("window_size"))
 
 # dynamically loaded metadata
 TRAIN_DATA_DESCRIPTION = None
@@ -49,7 +50,13 @@ def get_desc():
 def train_and_persist():
     time_start = datetime.now()
     print("training start:", time_start, flush=True)
-    model = fasttext.train_unsupervised(TRAIN_DATA_PATH, epoch=EPOCHS, dim=VECTOR_SIZE, verbose=3)
+    model = fasttext.train_unsupervised(
+        TRAIN_DATA_PATH, 
+        epoch=EPOCHS, 
+        dim=VECTOR_SIZE, 
+        verbose=3,
+        ws=WINDOW_SIZE,
+    )
     time_end = datetime.now()
     print("training done:", time_end, flush=True)
     global DURATION
