@@ -96,6 +96,7 @@ def write_metadata():
                     "train_data_md5_hash": train_data_md5_hash,
                     "training_epochs": EPOCHS,
                     "training_vector_size": VECTOR_SIZE,
+                    "training_window_size": WINDOW_SIZE,
                     "training_duration (minutes)": round(DURATION, 1),
                     "model_data_size": model_data_size,
                 }
