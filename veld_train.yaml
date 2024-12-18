@@ -17,7 +17,9 @@ x-veld:
       - volume: /veld/output/
         file_type: "fastText model"
         environment_var: out_model_file
-        content: "word embeddings"
+        content:
+          - "NLP model"
+          - "word embeddings model"
 
     config:
       - environment_var: vector_size
