@@ -1,7 +1,7 @@
 x-veld:
   code:
     description: "a fasttext training and inference jupyter notebook."
-    topics:
+    topic:
       - "NLP"
       - "Machine Learning"
       - "word embeddings"
