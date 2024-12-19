@@ -4,7 +4,7 @@ x-veld:
     topic:
       - "NLP"
       - "Machine Learning"
-      - "word embeddings"
+      - "Word Embeddings"
 
 services:
   veld_jupyter_notebook:

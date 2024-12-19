@@ -4,7 +4,7 @@ x-veld:
     topic:
       - "NLP"
       - "Machine Learning"
-      - "word embeddings"
+      - "Word Embeddings"
 
     input:
       - volume: /veld/input/
@@ -17,9 +17,7 @@ x-veld:
       - volume: /veld/output/
         file_type: "fastText model"
         environment_var: out_model_file
-        content:
-          - "NLP model"
-          - "word embeddings model"
+        content: "Word Embeddings"
 
     config:
       - environment_var: vector_size
