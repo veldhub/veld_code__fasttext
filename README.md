@@ -1,21 +1,40 @@
 # veld_code__fasttext
 
-This repo contains code velds relating to training and using fastText models.
-
-The code velds may be integrated into chain velds or used stand-alone by modyfing the respective
-veld yaml files directly.
+This repo contains [code velds](https://zenodo.org/records/13322913) encapsulating training and 
+usage of fastText models.
 
 ## requirements
 
 - git
-- docker compose
+- docker compose (note: older docker compose versions require running `docker-compose` instead of 
+  `docker compose`)
 
-## code velds
+## how to use
 
-This repo contains the following code velds. See inside their respective veld yaml files for more
-information.
+A code veld may be integrated into a chain veld, or used directly by adapting the configuration 
+within its yaml file and using the template folders provided in this repo. Open the respective veld 
+yaml file for more information.
 
-- [./veld_train.yaml](./veld_train.yaml) : Trains a model from scratch.
-- [./veld_jupyter_notebook.yaml](./veld_jupyter_notebook.yaml) : launches an interactive jupyter
-  notebook for playing with the models.
+Run a veld with:
+```
+docker compose -f <VELD_NAME>.yaml up
+```
+
+## contained code velds
+
+**[./veld_train.yaml](./veld_train.yaml)** 
+
+Trains a model from scratch.
+
+```
+docker compose -f veld_train.yaml up
+```
+
+**[./veld_jupyter_notebook.yaml](./veld_jupyter_notebook.yaml)**
+
+launches an interactive jupyter notebook for playing with the models.
+
+```
+docker compose -f veld_jupyter_notebook.yaml up
+```
 
