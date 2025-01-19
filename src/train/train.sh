@@ -12,17 +12,17 @@ echo "vector_size: ${vector_size}"
 echo "epochs: ${epochs}"
 echo "window_size: ${window_size}"
 
-python /veld/code/train.py &> /tmp/log &
+# default execution
+python -u /veld/code/train.py
 
-pid=$!
-
-sleep 5
-
-cat /tmp/log
-
-while ps -p $pid > /dev/null
-do
-  sleep 3
-  tail -n 2 /tmp/log
-done
+# hard-coded echo loop in case the container service buffers output too aggresively
+#python /veld/code/train.py &> /tmp/log &
+#pid=$!
+#sleep 5
+#cat /tmp/log
+#while ps -p $pid > /dev/null
+#do
+#  sleep 3
+#  tail -n 2 /tmp/log
+#done
 
